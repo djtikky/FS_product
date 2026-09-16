@@ -25,7 +25,7 @@ jobs:
 
           POSTGRES_USER: postgres
 
-          POSTGRES_PASSWORD: ********
+          POSTGRES_PASSWORD: postgres
 
           POSTGRES_DB: product_db
 
@@ -54,7 +54,7 @@ jobs:
 
         env:
 
-          DATABASE_URL: postgres://postgres:********@localhost:5432/product_db
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/product_db
 
           DB_HOST: localhost
 
@@ -64,7 +64,7 @@ jobs:
 
           DB_USER: postgres
 
-          DB_PASSWORD: ********
+          DB_PASSWORD: postgres
 
           PGHOST: localhost
 
