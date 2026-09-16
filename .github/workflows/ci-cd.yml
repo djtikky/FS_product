@@ -61,4 +61,4 @@ jobs:
 
           DB_USER: postgres
 
-          DB_PASSWORD: postgres 
+          DB_PASSWORD: postgres
