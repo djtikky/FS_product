@@ -14,6 +14,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
+
     services:
 
       db:
@@ -22,18 +23,23 @@ jobs:
 
         env:
 
-          POSTGRES_DB: product_db
+          POSTGRES_USER: postgres
 
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_PASSWORD: ********
+
+          POSTGRES_DB: product_db
 
         ports:
 
           - 5432:5432
+
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5          
+
 
     steps:
 
       - uses: actions/checkout@v3
+
 
       - name: Setup Node.js
 
@@ -43,22 +49,12 @@ jobs:
 
           node-version: '20'
 
+
       - name: Install & Test Backend
 
-        run: |
-
-          cd backend
-
-          npm install
-
-          # สร้างตารางก่อนรัน test (ใช้ psql สร้างตาราง products)
-
-          PGPASSWORD=postgres psql -h localhost -U postgres -d product_db -c "CREATE TABLE IF NOT EXISTS products ( id SERIAL PRIMARY KEY,  name VARCHAR(150) NOT NULL, description TEXT NOT NULL DEFAULT '', price NUMERIC(12, 2) NOT NULL CHECK (price >= 0), stock INTEGER NOT NULL DEFAULT 0 CHECK (stock >= 0), status VARCHAR(20) NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'inactive')), created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);"
-
-
-
-          npm test
         env:
+
+          DATABASE_URL: postgres://postgres:********@localhost:5432/product_db
 
           DB_HOST: localhost
 
@@ -68,4 +64,29 @@ jobs:
 
           DB_USER: postgres
 
-          DB_PASSWORD: postgres
+          DB_PASSWORD: ********
+
+          PGHOST: localhost
+
+          PGPORT: 5432
+
+          PGDATABASE: product_db
+
+          PGUSER: postgres
+
+          PGPASSWORD: postgres
+
+        run: |
+
+          cd backend
+
+          npm install
+
+          
+
+          # สร้างตารางก่อนรัน test (ระบบจะดึง PGPASSWORD จาก env ด้านบนอัตโนมัติ)
+
+          psql -h localhost -U postgres -d product_db -c "CREATE TABLE IF NOT EXISTS products ( id SERIAL PRIMARY KEY, name VARCHAR(150) NOT NULL, description TEXT NOT NULL DEFAULT '', price NUMERIC(12, 2) NOT NULL CHECK (price >= 0), stock INTEGER NOT NULL DEFAULT 0 CHECK (stock >= 0), status VARCHAR(20) NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'inactive')), created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);"
+
+
+          npm test
