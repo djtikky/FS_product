@@ -3,14 +3,13 @@ import pg from "pg";
 import dotenv from "dotenv";
 
 
-const environment = process.env.NODE_ENV || "development";
+// ถ้าอยู่บน Railway (Production) จะไม่อ่านไฟล์ .env เด็ดขาด
 
-
-if (environment !== "production") {
+if (process.env.NODE_ENV !== "production") {
 
   dotenv.config({
 
-    path: environment === "test" ? ".env.test" : ".env"
+    path: process.env.NODE_ENV === "test" ? ".env.test" : ".env"
 
   });
 
@@ -19,24 +18,23 @@ if (environment !== "production") {
 
 const { Pool } = pg;
 
-/*
-const pool = new Pool({
 
-  host: process.env.DB_HOST || "localhost",
+// พิมพ์ log ตรวจสอบค่าตอน start server (จะเห็นใน Logs บน Railway)
 
-  port: Number(process.env.DB_PORT) || 5432,
+console.log("Connecting DB with:", {
 
-  database: process.env.DB_NAME || "product_db",
+  hasDatabaseUrl: !!process.env.DATABASE_URL,
 
-  user: process.env.DB_USER || "postgres",
+  host: process.env.PGHOST || process.env.DB_HOST,
 
-  password: String(process.env.DB_PASSWORD || ""),
+  user: process.env.PGUSER || process.env.DB_USER,
 
-  ssl: false // ใน Railway internal network ปิดเป็น false ได้เลยครับ
+  db: process.env.PGDATABASE || process.env.DB_NAME,
+
+  nodeEnv: process.env.NODE_ENV
 
 });
 
-*/
 
 const pool = new Pool({
 
@@ -45,5 +43,6 @@ const pool = new Pool({
   ssl: false
 
 });
+
 
 export default pool;
