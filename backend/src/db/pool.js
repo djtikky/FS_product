@@ -20,20 +20,19 @@ if (environment !== "production") {
 const { Pool } = pg;
 
 
-// เช็กว่าถ้าเป็น internal network ของ Railway (postgres.railway.internal) หรือ localhost ไม่ต้องเปิด SSL
-
-const isInternal = !process.env.DATABASE_URL || 
-
-                   process.env.DATABASE_URL.includes("railway.internal") || 
-
-                   process.env.DATABASE_URL.includes("localhost");
-
-
 const pool = new Pool({
 
-  connectionString: process.env.DATABASE_URL,
+  host: process.env.DB_HOST || "localhost",
 
-  ssl: isInternal ? false : { rejectUnauthorized: false }
+  port: Number(process.env.DB_PORT) || 5432,
+
+  database: process.env.DB_NAME || "product_db",
+
+  user: process.env.DB_USER || "postgres",
+
+  password: String(process.env.DB_PASSWORD || ""),
+
+  ssl: false // ใน Railway internal network ปิดเป็น false ได้เลยครับ
 
 });
 
