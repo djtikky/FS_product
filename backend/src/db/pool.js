@@ -3,8 +3,6 @@ import pg from "pg";
 import dotenv from "dotenv";
 
 
-// ถ้าอยู่บน Railway (Production) จะไม่อ่านไฟล์ .env เด็ดขาด
-
 if (process.env.NODE_ENV !== "production") {
 
   dotenv.config({
@@ -19,30 +17,51 @@ if (process.env.NODE_ENV !== "production") {
 const { Pool } = pg;
 
 
-// พิมพ์ log ตรวจสอบค่าตอน start server (จะเห็นใน Logs บน Railway)
-
-console.log("Connecting DB with:", {
-
-  hasDatabaseUrl: !!process.env.DATABASE_URL,
-
-  host: process.env.PGHOST || process.env.DB_HOST,
-
-  user: process.env.PGUSER || process.env.DB_USER,
-
-  db: process.env.PGDATABASE || process.env.DB_NAME,
-
-  nodeEnv: process.env.NODE_ENV
-
-});
+let poolConfig = {};
 
 
-const pool = new Pool({
+if (process.env.DATABASE_URL) {
 
-  connectionString: process.env.DATABASE_URL,
+  const dbUrl = new URL(process.env.DATABASE_URL);
 
-  ssl: false
+  poolConfig = {
 
-});
+    user: decodeURIComponent(dbUrl.username),
+
+    password: decodeURIComponent(dbUrl.password),
+
+    host: dbUrl.hostname,
+
+    port: Number(dbUrl.port) || 5432,
+
+    database: dbUrl.pathname.replace(/^\//, ""),
+
+    ssl: false
+
+  };
+
+} else {
+
+  poolConfig = {
+
+    host: process.env.DB_HOST || "localhost",
+
+    port: Number(process.env.DB_PORT) || 5432,
+
+    database: process.env.DB_NAME || "product_db",
+
+    user: process.env.DB_USER || "postgres",
+
+    password: String(process.env.DB_PASSWORD || ""),
+
+    ssl: false
+
+  };
+
+}
+
+
+const pool = new Pool(poolConfig);
 
 
 export default pool;
