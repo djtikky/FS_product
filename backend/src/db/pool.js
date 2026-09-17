@@ -19,7 +19,7 @@ if (environment !== "production") {
 
 const { Pool } = pg;
 
-
+/*
 const pool = new Pool({
 
   host: process.env.DB_HOST || "localhost",
@@ -36,5 +36,14 @@ const pool = new Pool({
 
 });
 
+*/
+
+const pool = new Pool({
+
+  connectionString: process.env.DATABASE_URL,
+
+  ssl: false
+
+});
 
 export default pool;
