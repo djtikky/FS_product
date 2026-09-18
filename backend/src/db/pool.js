@@ -12,8 +12,6 @@ const { Pool } = pg;
 let poolConfig = {};
 
 if (process.env.DATABASE_URL) {
-  console.log(process.env.DATABASE_URL);
-  console.log("Using DATABASE_URL for database connection.");
 
   const dbUrl = new URL(process.env.DATABASE_URL);
 
@@ -25,17 +23,6 @@ if (process.env.DATABASE_URL) {
     database: dbUrl.pathname.replace(/^\//, ""),
     ssl: false
   };
-
-  console.log("Using DATABASE_URL for database connection.");
-  console.log(`Database host: ${poolConfig.host}`);
-  console.log(`Database name: ${poolConfig.database}`);   
-  console.log(`Database user: ${poolConfig.user}`);
-  console.log(`Database port: ${poolConfig.port}`);
-  console.log(`Database password: ${poolConfig.password}`);
-  console.log(`Database SSL: ${poolConfig.ssl}`);
-  console.log(`Database URL: ${poolConfig.password ? "********" : "" } ${process.env.DATABASE_URL} `);
-
-
 } else {
 
   poolConfig = {
