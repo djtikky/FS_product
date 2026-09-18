@@ -26,17 +26,11 @@ function App() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
 
-
   const [loading, setLoading] = useState(true);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const [deletingId, setDeletingId] = useState(null);
-
   const [editingProduct, setEditingProduct] = useState(null);
-
   const [error, setError] = useState("");
-
 /*
   async function loadProducts() {
 
@@ -64,27 +58,41 @@ function App() {
 */
 
 async function loadProducts(filters = {}) {
-
   try {
-
     setError("");
-
     const data = await getProducts(filters);
+    console.log("Response data:", data); // ดูโครงสร้างจริงใน F12
 
-    setProducts(data);
 
+    // ดึงเฉพาะก้อน Array มาใส่ใน State
+
+    if (Array.isArray(data)) {
+
+      setProducts(data);
+
+    } else if (Array.isArray(data?.data)) {
+
+      setProducts(data.data);
+
+    } else if (Array.isArray(data?.products)) {
+
+      setProducts(data.products);
+
+    } else if (Array.isArray(data?.items)) {
+
+      setProducts(data.items);
+
+    } else {
+
+      setProducts([]);
+
+    }
   } catch (requestError) {
-
     console.error(requestError);
-
     setError("ไม่สามารถโหลดรายการสินค้าได้");
-
   } finally {
-
     setLoading(false);
-
   }
-
 }
 /*
   useEffect(() => {
