@@ -8,13 +8,21 @@ const api = axios.create({
 
 });
 */
-
-
+const api = axios.create({
+  baseURL: "https://fsproduct-production.up.railway.app",
+});
+/*
 const api = axios.create({
   // ถ้าไม่มี VITE_API_URL ให้ใช้ค่า default เป็น /api สำหรับกรณีที่ใช้ Nginx
   baseURL: import.meta.env.VITE_API_URL || "/api"
 });
-/*
+
+
+
+
+
+
+
 
 const api = axios.create({
 
@@ -74,31 +82,17 @@ export async function getProducts(filters = {}) {
 */
 
 export async function getProducts(filters = {}) {
-
   const params = {};
 
-  
-
   // ส่งเฉพาะเมื่อมีค่า และไม่ใช่ค่าว่าง
-
   if (filters.search && filters.search.trim() !== "") {
-
     params.search = filters.search;
-
   }
-
   if (filters.status && filters.status !== "") {
-
     params.status = filters.status;
-
   }
-
-  
-
   const response = await api.get("/products", { params });
-
   return response.data;
-
 }
 
 export async function createProduct(product) {
