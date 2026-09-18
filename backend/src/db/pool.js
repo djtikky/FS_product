@@ -1,67 +1,22 @@
 import pg from "pg";
 
-import dotenv from "dotenv";
-
-
-if (process.env.NODE_ENV !== "production") {
-
-  dotenv.config({
-
-    path: process.env.NODE_ENV === "test" ? ".env.test" : ".env"
-
-  });
-
-}
-
-
 const { Pool } = pg;
 
 
-let poolConfig = {};
+const connectionString = process.env.DATABASE_URL;
 
 
-if (process.env.DATABASE_URL) {
+const pool = new Pool({
 
-  const dbUrl = new URL(process.env.DATABASE_URL);
+  connectionString: connectionString,
 
-  poolConfig = {
+  ssl: connectionString && !connectionString.includes("localhost")
 
-    user: decodeURIComponent(dbUrl.username),
+    ? { rejectUnauthorized: false }
 
-    password: decodeURIComponent(dbUrl.password),
+    : false
 
-    host: dbUrl.hostname,
-
-    port: Number(dbUrl.port) || 5432,
-
-    database: dbUrl.pathname.replace(/^\//, ""),
-
-    ssl: false
-
-  };
-
-} else {
-
-  poolConfig = {
-
-    host: process.env.DB_HOST || "localhost",
-
-    port: Number(process.env.DB_PORT) || 5432,
-
-    database: process.env.DB_NAME || "product_db",
-
-    user: process.env.DB_USER || "postgres",
-
-    password: String(process.env.DB_PASSWORD || ""),
-
-    ssl: false
-
-  };
-
-}
-
-
-const pool = new Pool(poolConfig);
+});
 
 
 export default pool;
