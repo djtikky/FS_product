@@ -1,17 +1,19 @@
 import pg from "pg";
 import dotenv from "dotenv";
-/*
+
 if (process.env.NODE_ENV !== "production") {
   dotenv.config({
     path: process.env.NODE_ENV === "test" ? ".env.test" : ".env"
   });
 }
-*/
+
 const { Pool } = pg;
 
 let poolConfig = {};
 
 if (process.env.DATABASE_URL) {
+  console.log(process.env.DATABASE_URL);
+
   const dbUrl = new URL(process.env.DATABASE_URL);
   poolConfig = {
     user: decodeURIComponent(dbUrl.username),
@@ -26,8 +28,10 @@ if (process.env.DATABASE_URL) {
   console.log(`Database name: ${poolConfig.database}`);   
   console.log(`Database user: ${poolConfig.user}`);
   console.log(`Database port: ${poolConfig.port}`);
-  console.log(`Database SSL: ${poolConfig.ssl}`);
   console.log(`Database password: ${poolConfig.password}`);
+  console.log(`Database SSL: ${poolConfig.ssl}`);
+  console.log(`Database URL: ${poolConfig.password ? "********" : "" } ${process.env.DATABASE_URL} `);
+
 
 } else {
 
