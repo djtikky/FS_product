@@ -31,6 +31,10 @@ function App() {
   const [deletingId, setDeletingId] = useState(null);
   const [editingProduct, setEditingProduct] = useState(null);
   const [error, setError] = useState("");
+
+
+
+
 /*
   async function loadProducts() {
 
@@ -58,13 +62,16 @@ function App() {
 */
 
 async function loadProducts(filters = {}) {
+
   try {
+
     setError("");
+
     const data = await getProducts(filters);
-    console.log("Response data:", data); // ดูโครงสร้างจริงใน F12
 
+    
 
-    // ดึงเฉพาะก้อน Array มาใส่ใน State
+    // Axios response.data เป็น Array อยู่แล้ว ให้ใส่ตรงๆ ได้เลย
 
     if (Array.isArray(data)) {
 
@@ -74,26 +81,26 @@ async function loadProducts(filters = {}) {
 
       setProducts(data.data);
 
-    } else if (Array.isArray(data?.products)) {
-
-      setProducts(data.products);
-
-    } else if (Array.isArray(data?.items)) {
-
-      setProducts(data.items);
-
     } else {
 
       setProducts([]);
 
     }
+
   } catch (requestError) {
+
     console.error(requestError);
+
     setError("ไม่สามารถโหลดรายการสินค้าได้");
+
   } finally {
+
     setLoading(false);
+
   }
+
 }
+
 /*
   useEffect(() => {
 
