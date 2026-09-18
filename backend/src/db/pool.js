@@ -1,12 +1,12 @@
 import pg from "pg";
 import dotenv from "dotenv";
-
+/*
 if (process.env.NODE_ENV !== "production") {
   dotenv.config({
     path: process.env.NODE_ENV === "test" ? ".env.test" : ".env"
   });
 }
-
+*/
 const { Pool } = pg;
 
 let poolConfig = {};
@@ -21,6 +21,13 @@ if (process.env.DATABASE_URL) {
     database: dbUrl.pathname.replace(/^\//, ""),
     ssl: false
   };
+  console.log("Using DATABASE_URL for database connection.");
+  console.log(`Database host: ${poolConfig.host}`);
+  console.log(`Database name: ${poolConfig.database}`);   
+  console.log(`Database user: ${poolConfig.user}`);
+  console.log(`Database port: ${poolConfig.port}`);
+  console.log(`Database SSL: ${poolConfig.ssl}`);
+  console.log(`Database password: ${poolConfig.password}`);
 
 } else {
 
