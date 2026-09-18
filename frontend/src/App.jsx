@@ -378,89 +378,87 @@ await loadProducts({
 
         {!loading && !error && products.length > 0 && (
 
-          <div className="product-grid">
+          <div className="product-grid">{Array.isArray(products) && products.length > 0 ? (
 
-            {products.map((product) => (
+  products.map((product) => (
 
-              <article className="product-card" key={product.id}>
+    <article className="product-card" key={product.id}>
 
-                <div className="product-card__top">
+      <div className="product-card__top">
 
-                  <h3>{product.name}</h3>
+        <h3>{product.name}</h3>
 
-                  <span className={`badge badge--${product.status}`}>
+        <span className={`badge badge--${product.status}`}>
 
-                    {product.status}
+          {product.status}
 
-                  </span>
+        </span>
 
-                </div>
+      </div>
 
+      <p className="product-card__description">
 
-                <p className="product-card__description">
+        {product.description || "ไม่มีรายละเอียด"}
 
-                  {product.description || "ไม่มีรายละเอียด"}
+      </p>
 
-                </p>
+      <div className="product-card__details">
 
+        <span>
 
-                <div className="product-card__details">
+          ราคา: ฿{Number(product.price).toLocaleString()}
 
-                  <span>
+        </span>
 
-                    ราคา: ฿{Number(product.price).toLocaleString()}
+        <span>คงเหลือ: {product.stock}</span>
 
-                  </span>
+      </div>
 
-                  <span>คงเหลือ: {product.stock}</span>
+      <div className="product-card__actions">
 
-                </div>
+        <button
 
+          type="button"
 
-                <div className="product-card__actions">
+          className="button button--secondary"
 
-                  <button
+          onClick={() => handleEditProduct(product)}
 
-                    type="button"
+          disabled={deletingId === product.id}
 
-                    className="button button--secondary"
+        >
 
-                    onClick={() => handleEditProduct(product)}
+          แก้ไข
 
-                    disabled={deletingId === product.id}
+        </button>
 
-                  >
+        <button
 
-                    แก้ไข
+          type="button"
 
-                  </button>
+          className="button button--danger"
 
+          onClick={() => handleDeleteProduct(product)}
 
-                  <button
+          disabled={deletingId === product.id}
 
-                    type="button"
+        >
 
-                    className="button button--danger"
+          {deletingId === product.id ? "กำลังลบ..." : "ลบ"}
 
-                    onClick={() => handleDeleteProduct(product)}
+        </button>
 
-                    disabled={deletingId === product.id}
+      </div>
 
-                  >
+    </article>
 
-                    {deletingId === product.id
+  ))
 
-                      ? "กำลังลบ..."
+) : (
 
-                      : "ลบ"}
+  <p>ไม่มีรายการสินค้า หรือกำลังโหลดข้อมูล...</p>
 
-                  </button>
-
-                </div>
-
-              </article>
-
-            ))}
+)}
 
           </div>
 
