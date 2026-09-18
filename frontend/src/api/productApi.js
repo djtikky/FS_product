@@ -9,8 +9,9 @@ const api = axios.create({
 });
 */
 const api = axios.create({
-  baseURL: "https://fsproduct-production.up.railway.app",
+  baseURL: "https://fsproduct-production.up.railway.app/api",
 });
+
 /*
 const api = axios.create({
   // ถ้าไม่มี VITE_API_URL ให้ใช้ค่า default เป็น /api สำหรับกรณีที่ใช้ Nginx
