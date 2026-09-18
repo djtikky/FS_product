@@ -13,8 +13,10 @@ let poolConfig = {};
 
 if (process.env.DATABASE_URL) {
   console.log(process.env.DATABASE_URL);
+  console.log("Using DATABASE_URL for database connection.");
 
   const dbUrl = new URL(process.env.DATABASE_URL);
+
   poolConfig = {
     user: decodeURIComponent(dbUrl.username),
     password: decodeURIComponent(dbUrl.password),
@@ -23,6 +25,7 @@ if (process.env.DATABASE_URL) {
     database: dbUrl.pathname.replace(/^\//, ""),
     ssl: false
   };
+
   console.log("Using DATABASE_URL for database connection.");
   console.log(`Database host: ${poolConfig.host}`);
   console.log(`Database name: ${poolConfig.database}`);   
